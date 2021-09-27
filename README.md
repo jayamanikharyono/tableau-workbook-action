@@ -1,6 +1,6 @@
 # Tableau-Workbook-Action
 
-You can use this action to easily validate and deploy your tableau workbook to your tableau server. This action currently tested to deploy workbook with .twb format.
+You can use this action to easily validate and publish your tableau workbook to your tableau server. This action currently tested to publish workbook with .twb format.
 
 Action Env Var:
 - **USERNAME**: ${{ secrets.USERNAME }} *Your tableau username*
@@ -10,7 +10,7 @@ Action Env Var:
 
 Action Args :
 - **workbook_dir**: tests/workbooks *Workbook dir in repo*
-- **env**: production *Target deployment*
+- **env**: staging *Target environment*
 - **repo_token**: ${{ secrets.GITHUB_TOKEN }} *Repo access token*
 
 File Metadata (yaml file that hold workbook metadata):
@@ -21,7 +21,7 @@ File Metadata (yaml file that hold workbook metadata):
 ## Example
 ##### Usage Scenario
 
-> - Want to deploy film workbook to tableau server
+> - Want to publish film workbook to tableau server
 > - workbook and metadata files placed in /tests/workbooks dir
 > - using one metadata files (can be multiple files)
 
@@ -37,24 +37,20 @@ workbooks:
       file_path: film_workbook.twb
       project_path: Dashboard/Film
 ```
-Workflows `.github/workflows/production-workflows.yml`
+Workflows `.github/workflows/staging-workflows.yml`
 ```yml
-name: Tableau Workbook Workflows Production
+name: Tableau Workbook Workflows Staging
 on:
   pull_request:
-    branches:
-      - master
-    types: [closed]
+      branches:
+        - master
 jobs:
-  tableau-Validation-action:
-    name: Tableau Workbook Production Deployments
+  tableau-validation-action:
+    name: Tableau Workbook Staging Publisher
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: master
-      - name: 'Tableau Workbook Deployments Action'
+      - name: 'Tableau Workbook Action' #This workflows expected to be error since no secrets vars provided
         uses: ./
         env:
           USERNAME: ${{ secrets.USERNAME }}

@@ -5,7 +5,7 @@ on:
         - master
 jobs:
   tableau-validation-action:
-    name: Tableau Workbook Staging Deployments
+    name: Tableau Workbook Staging Publisher
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -1,6 +1,6 @@
 # action.yml
 name: 'Tableau Workbook Action'
-description: 'Github Action to validate and deploy your Tableau Workbook'
+description: 'Github Action to validate and publish your Tableau Workbook'
 branding:
   icon: 'bar-chart-2'
   color: 'gray-dark'
