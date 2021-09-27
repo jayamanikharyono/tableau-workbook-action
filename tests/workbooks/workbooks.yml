@@ -1,0 +1,4 @@
+workbooks:
+    - name: film_workbook
+      file_path: film_workbook.twb
+      project_path: Dashboard/Film

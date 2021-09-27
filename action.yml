@@ -1,0 +1,23 @@
+# action.yml
+name: 'Tableau Workbook Action'
+description: 'Github Action to validate and deploy your Tableau Workbook'
+branding:
+  icon: 'bar-chart-2'
+  color: 'gray-dark'
+inputs:
+  workbook_dir:
+    description: 'Path to you workbook directory'
+    required: true
+  env:
+    description: 'Target environments'
+    required: true
+  repo_token:
+    description: 'Repo access token'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.workbook_dir}}
+    - ${{ inputs.env }}
+    - ${{ inputs.repo_token }}
