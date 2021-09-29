@@ -99,20 +99,23 @@ def main(args):
         status = True
         list_message = list()
         for file in addmodified_files:
-            workbook_schema = full_schema_config['workbooks'][file]
-            try:
-                logging.info("Publishing workbook : { workbook_schema['project_path'] + '/' + workbook_schema['name'] } to Tableau")
-                project_path, new_workbook = submit_workbook(workbook_schema['name'],
-                                                             workbook_schema['project_path'],
-                                                             args.workbook_dir + "/" + file,
-                                                             args.env)
-                logging.info(f"Workbook : { project_path } Published to Tableau")
-                list_message.append(f"Workbook : { project_path } published to Tableau  :heavy_check_mark:")
-            except Exception as e:
-                logging.info(f"Error publishing workbook { workbook_schema['name'] }")
-                logging.error(e)
-                list_message.append(f"Workbook : { workbook_schema['name'] } not published to Tableau   :x:")
-                status = False
+            if file in full_schema_config['workbooks'].keys():
+                workbook_schema = full_schema_config['workbooks'][file]
+                try:
+                    logging.info("Publishing workbook : { workbook_schema['project_path'] + '/' + workbook_schema['name'] } to Tableau")
+                    project_path, new_workbook = submit_workbook(workbook_schema['name'],
+                                                                 workbook_schema['project_path'],
+                                                                 args.workbook_dir + "/" + file,
+                                                                 args.env)
+                    logging.info(f"Workbook : { project_path } Published to Tableau")
+                    list_message.append(f"Workbook : { project_path } published to Tableau  :heavy_check_mark:")
+                except Exception as e:
+                    logging.info(f"Error publishing workbook { workbook_schema['name'] }")
+                    logging.error(e)
+                    list_message.append(f"Workbook : { workbook_schema['name'] } not published to Tableau   :x:")
+                    status = False
+            else:
+                logging.info(f"Skip publishing workbook { workbook_schema['name'] } not listed in config files")
 
         comment_pr(args.repo_token, "\n".join(list_message))
         if status is False:
