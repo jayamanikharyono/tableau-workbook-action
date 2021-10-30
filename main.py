@@ -38,7 +38,7 @@ def get_full_schema(project_dir):
 
     new_schema = dict({'workbooks':dict()})
     for value in full_schema['workbooks']:
-        new_schema['workbooks'][value['file_path']] = {'name':value['name'], 'project_path': value['project_path']}
+        new_schema['workbooks'][value['file_path']] = value
 
     return new_schema
 
@@ -63,9 +63,9 @@ def get_addmodified_files(repo_token):
     return list_files
 
 
-def submit_workbook(name, project_path, file_path, env):
+def submit_workbook(workbook_schema, file_path, env):
     if env != 'production':
-        project_path = 'staging/' + project_path
+        project_path = 'staging/' + workbook_schema['project_path']
 
     tableau_api = TableauApi(os.environ['USERNAME'],
                             os.environ['PASSWORD'],
@@ -78,7 +78,24 @@ def submit_workbook(name, project_path, file_path, env):
         logging.info("Existing project on a given path doesn't exist, creating new project")
         project_id = tableau_api.create_project_by_path(project_path)
 
-    new_workbook = tableau_api.publish_workbook(name =  name, project_id = project_id, file_path = file_path)
+    hidden_views = None
+    show_tabs = False
+    tags = None
+    description = None
+
+    if 'option' in workbook_schema:
+        hidden_views = workbook_schema['option']['hidden_views'] if 'hidden_views' in workbook_schema['option'] else None
+        show_tabs = workbook_schema['option']['show_tabs'] if 'show_tabs' in workbook_schema['option'] else False
+        tags = workbook_schema['option']['tags'] if 'tags' in workbook_schema['option'] else None
+        description = workbook_schema['option']['description'] if 'description' in workbook_schema['option'] else None
+
+    new_workbook = tableau_api.publish_workbook(name =  workbook_schema['name'],
+                                                project_id = project_id,
+                                                file_path = file_path,
+                                                hidden_views = hidden_views,
+                                                show_tabs = show_tabs,
+                                                tags = tags,
+                                                description = description)
 
     return project_path, new_workbook
 
@@ -103,8 +120,7 @@ def main(args):
                 workbook_schema = full_schema_config['workbooks'][file]
                 try:
                     logging.info("Publishing workbook : { workbook_schema['project_path'] + '/' + workbook_schema['name'] } to Tableau")
-                    project_path, new_workbook = submit_workbook(workbook_schema['name'],
-                                                                 workbook_schema['project_path'],
+                    project_path, new_workbook = submit_workbook(workbook_schema,
                                                                  args.workbook_dir + "/" + file,
                                                                  args.env)
                     logging.info(f"Workbook : { project_path } Published to Tableau")
