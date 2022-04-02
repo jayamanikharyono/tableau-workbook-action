@@ -30,13 +30,16 @@ class TableauWorkbookError(Exception):
 
 
 def get_full_schema(project_dir):
+    print(project_dir)
     from mergedeep import merge, Strategy
     full_schema = None
     for schema_file in Path(project_dir).glob("**/*.yml"):
+        print(schema_file)
         schema = yaml.full_load(schema_file.open())
         full_schema = merge(full_schema, schema, strategy=Strategy.ADDITIVE) if full_schema is not None else schema
 
     new_schema = dict({'workbooks':dict()})
+    print(full_schema)
     for value in full_schema['workbooks']:
         new_schema['workbooks'][value['file_path']] = value
 
@@ -101,8 +104,8 @@ def submit_workbook(workbook_schema, file_path, env):
 
 
 def main(args):
-    logging.info("Workbook Dir : { args.workbook_dir }")
-    logging.info("Environments : { args.env }")
+    logging.info(f"Workbook Dir : { args.workbook_dir }")
+    logging.info(f"Environments : { args.env }")
 
     full_schema_config = get_full_schema(args.workbook_dir)
 
