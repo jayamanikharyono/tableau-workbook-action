@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: 'Tableau Workbook Action' #This workflows expected to be error since no secrets vars provided
+      - name: 'Tableau Workbook Action' 
         uses: jayamanikharyono/tableau-workbook-action@v1.4
         env:
           USERNAME: ${{ secrets.USERNAME }}
