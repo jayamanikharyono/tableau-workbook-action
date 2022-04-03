@@ -39,12 +39,10 @@ def get_full_schema(project_dir):
     from mergedeep import merge, Strategy
     full_schema = None
     for schema_file in Path(project_dir).glob("**/*.yml"):
-        print(schema_file)
         schema = yaml.full_load(schema_file.open())
         full_schema = merge(full_schema, schema, strategy=Strategy.ADDITIVE) if full_schema is not None else schema
 
     new_schema = dict({'workbooks':dict()})
-    print(full_schema)
     for value in full_schema['workbooks']:
         new_schema['workbooks'][value['file_path']] = value
 
@@ -145,7 +143,7 @@ def main(args):
         if status is False:
             raise TableauWorkbookError("\n".join(list_message))
     else:
-        logging.info("Not file changes detected")
+        logging.info("No file changes detected")
     return True
 
 
