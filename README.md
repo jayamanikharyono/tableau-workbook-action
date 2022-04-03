@@ -66,7 +66,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: 'Tableau Workbook Action' #This workflows expected to be error since no secrets vars provided
-        uses: ./
+        uses: jayamanikharyono/tableau-workbook-action@v1.4
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
