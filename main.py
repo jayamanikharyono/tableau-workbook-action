@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+@author: jayaharyonomanik
+"""
+
 
 import os
 import yaml
@@ -9,6 +13,7 @@ from pathlib import Path
 from github import Github
 
 from tableau_api import TableauApi
+
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -30,6 +35,7 @@ class TableauWorkbookError(Exception):
 
 
 def get_full_schema(project_dir):
+    print(project_dir)
     from mergedeep import merge, Strategy
     full_schema = None
     for schema_file in Path(project_dir).glob("**/*.yml"):
@@ -101,8 +107,8 @@ def submit_workbook(workbook_schema, file_path, env):
 
 
 def main(args):
-    logging.info("Workbook Dir : { args.workbook_dir }")
-    logging.info("Environments : { args.env }")
+    logging.info(f"Workbook Dir : { args.workbook_dir }")
+    logging.info(f"Environments : { args.env }")
 
     full_schema_config = get_full_schema(args.workbook_dir)
 
@@ -137,7 +143,7 @@ def main(args):
         if status is False:
             raise TableauWorkbookError("\n".join(list_message))
     else:
-        logging.info("Not file changes detected")
+        logging.info("No file changes detected")
     return True
 
 
