@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+@author: jayaharyonomanik
+"""
+
 
 import logging
 import requests

@@ -6,9 +6,6 @@ echo "Repo Token : $3"
 
 cp -r /action/* /github/workspace/
 
-ls
-pwd
-
 python main.py --workbook_dir=$1 --env=$2 --repo_token=$3
 
 exit 0
