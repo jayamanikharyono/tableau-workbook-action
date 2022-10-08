@@ -5,6 +5,7 @@
 
 
 import os
+import sys
 import yaml
 import json
 import logging
@@ -141,10 +142,11 @@ def main(args):
 
         comment_pr(args.repo_token, "\n".join(list_message))
         if status is False:
-            raise TableauWorkbookError("\n".join(list_message))
+            #raise TableauWorkbookError("\n".join(list_message))
+            sys.exit(1)
     else:
         logging.info("No file changes detected")
-    return True
+    sys.exit(0)
 
 
 if __name__=='__main__':
