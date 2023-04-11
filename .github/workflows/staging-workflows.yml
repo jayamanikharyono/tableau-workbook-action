@@ -1,8 +1,7 @@
 name: Tableau Workbook Workflows Staging
 on:
-  pull_request:
-      branches:
-        - master
+  - pull_request
+
 jobs:
   tableau-validation-action:
     name: Tableau Workbook Staging Publisher
@@ -12,10 +11,10 @@ jobs:
       - name: 'Tableau Workbook Action' #This workflows expected to be error since no secrets vars provided
         uses: ./
         env:
-          USERNAME: ${{ secrets.USERNAME }}
-          PASSWORD: ${{ secrets.PASSWORD }}
-          SITE_ID: ${{ secrets.SITE_ID }}
-          TABLEAU_URL: ${{ secrets.TABLEAU_URL }}
+          USERNAME: "blockb@vitessepsp.com"
+          PASSWORD: "9u@7fXw9nKcr$rVrR"
+          SITE_ID: "vitessetest2"
+          TABLEAU_URL: "vitessetest2"
         with:
           workbook_dir: tests/workbooks
           env: staging
