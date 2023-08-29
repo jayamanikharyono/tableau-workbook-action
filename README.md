@@ -1,5 +1,6 @@
 # Tableau-Workbook-Action
 test1
+test2
 
 You can use this action to easily validate and publish your tableau workbook to your tableau server. This action currently tested to publish workbook with .twb format.
 
