@@ -1,0 +1,22 @@
+name: Tableau Workbook Workflows Staging
+on:
+  pull_request:
+      branches:
+        - master
+jobs:
+  tableau-validation-action:
+    name: Tableau Workbook Staging Publisher
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Tableau Workbook Action' #This workflows expected to be error since no secrets vars provided
+        run: echo "🎉 The job was automatically triggered by a ${{ secrets.USERNAME }} event."
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          SITE_ID: ${{ secrets.SITE_ID }}
+          TABLEAU_URL: ${{ secrets.TABLEAU_URL }}
+        # with:
+        #   workbook_dir: tests/workbooks
+        #   env: staging
+        #   repo_token: ${{ secrets.GITHUB_TOKEN }}
