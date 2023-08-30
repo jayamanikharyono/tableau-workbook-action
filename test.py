@@ -32,10 +32,10 @@ def get_full_schema_dev(project_dir):
                                           })
     return schema
 
-def get_addmodified_files_dev(repo_token):
-    g = Github(repo_token)
+def get_addmodified_files_dev():
+    g = Github(os.environ['REPO_TOKEN'])
     repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
-    pr_number = os.environ["GITHUB_REF"].split("/")[-1]
+    pr_number = os.environ['PR_NUMBER']
     print(os.environ["GITHUB_REF"])
     print(pr_number)
     pull_request = repo.get_pull(pr_number)
@@ -61,7 +61,7 @@ def get_addmodified_files_dev(repo_token):
 
 def main():
     #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
-    print(get_addmodified_files_dev(os.environ['REPO_TOKEN']))
+    print(get_addmodified_files_dev())
     print("Success!!")
 
 if __name__ == "__main__":
