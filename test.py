@@ -34,6 +34,7 @@ def get_full_schema_dev(project_dir):
     print(project_dir)
     for currentpath, folders, files in os.walk(project_dir):
         for file in files:
+            print(currentpath, file)
             if file.endswith(('.twb', '.twbx')):
                 name = re.findall(r'^(.+?)(?:\.twb|\.twbx)', file)[0]
                 project_path = re.findall(fr"{re.escape(project_dir)}\\(.+)", currentpath)[0]
