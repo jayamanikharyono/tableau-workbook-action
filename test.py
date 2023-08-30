@@ -5,7 +5,7 @@ import json
 import logging
 import argparse
 from pathlib import Path
-from github import Github
+#from github import Github
 from tableau_api import TableauApi
 
 # new library
@@ -40,7 +40,8 @@ def get_full_schema_dev(project_dir):
                 full_path = os.path.join(project_path, file_path)
                 schema[full_path] = dict({'name': name,
                                           'project_path': project_path,
-                                          'file_path': file_path
+                                          'file_path': file_path,
+                                          'full_path': full_path
                                           })
     return schema
 
@@ -53,6 +54,6 @@ def get_addmodified_files(repo_token):
     list_files = [file.filename for file in pr.get_files() if os.path.exists(file.filename)]
     return list_files
 
+print(get_full_schema_dev(os.environ['workbook_dir']))
 print("Success!!")
-#print(get_full_schema_original("tests/workbooks"))
 
