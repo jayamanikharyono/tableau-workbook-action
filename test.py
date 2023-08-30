@@ -32,15 +32,18 @@ def get_full_schema_dev(project_dir):
                                           })
     return schema
 
-def get_addmodified_files_dev(base_commit_sha):
-    repo = git.Repo(".")
-    base_commit = repo.commit(base_commit_sha)
-    current_commit = repo.commit("HEAD")
+def get_addmodified_files_dev(repo_token):
+    g = Github(repo_token)
+    repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
+    pr_number = os.environ["GITHUB_REF"].split("/")[-1]
+    pull_request = repo.get_pull(pr_number)
+    base_commit = pull_request.base.sha
+    head_commit = pull_request.head.sha
 
-    diff = base_commit.diff(current_commit)
-    added_files = [item.a_path for item in diff.iter_change_type('A')]
-    modified_files = [item.a_path for item in diff.iter_change_type('M')]
-    deleted_files = [item.b_path for item in diff.iter_change_type('D')]
+    diff = repo.compare(base_commit, head_commit)
+    added_files = [file.filename for file in diff.files if file.status == "added"]
+    modified_files = [file.filename for file in diff.files if file.status == "modified"]
+    deleted_files = [file.filename for file in diff.files if file.status == "removed"]
 
     print("Added files:")
     for filename in added_files:
@@ -56,7 +59,7 @@ def get_addmodified_files_dev(base_commit_sha):
 
 def main():
     #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
-    print(get_addmodified_files_dev(os.environ['BASE_COMMIT_SHA']))
+    print(get_addmodified_files_dev(os.environ['REPO_TOKEN']))
     print("Success!!")
 
 if __name__ == "__main__":
