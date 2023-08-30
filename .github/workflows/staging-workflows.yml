@@ -34,7 +34,7 @@ jobs:
           SITE_ID: ${{ secrets.SITE_ID }}
           TABLEAU_URL: ${{ secrets.TABLEAU_URL }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          workbook_dir: tests\\tableau_reports
+          workbook_dir: "tests\\tableau_reports"
         # with:
         #   workbook_dir: tests/workbooks
         #   env: staging

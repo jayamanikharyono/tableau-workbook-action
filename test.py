@@ -56,7 +56,7 @@ def get_addmodified_files(repo_token):
     return list_files
 
 def main():
-    print(get_full_schema_dev(os.environ['workbook_dir']))
+    print(get_full_schema_dev("tests\\tableau_reports"))
     print("Success!!")
 
 if __name__ == "__main__":
