@@ -25,5 +25,5 @@ def get_full_schema(project_dir):
     return new_schema
 
 full_schema_config = get_full_schema("tests/workbooks")
-for i in full_schema_config['workbook'].keys():
+for i in full_schema_config['workbooks'].keys():
     print(i)
