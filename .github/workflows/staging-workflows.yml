@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -r requirements.txt
-          
+
       - name: 'Tableau Workbook Action'
         run: python test.py
         env:
@@ -32,8 +32,9 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           SITE_ID: ${{ secrets.SITE_ID }}
           TABLEAU_URL: ${{ secrets.TABLEAU_URL }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          workbook_dir: "tests/tableau_reports"
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKBOOK_DIR: "tests/tableau_reports"
+          BASE_COMMIT_SHA: ${{ github.event.pull_request.base.sha }}
         # with:
         #   workbook_dir: tests/workbooks
         #   env: staging

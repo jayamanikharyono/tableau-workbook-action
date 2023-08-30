@@ -43,9 +43,9 @@ def get_addmodified_files_dev(repo_token):
     return list_files
 
 def main():
-    #print(get_full_schema_dev(os.environ['workbook_dir']))
-    #print(get_addmodified_files_dev(os.environ['repo_token']))
-    print(Github.event.pull_request.base.sha)
+    #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
+    #print(get_addmodified_files_dev(os.environ['REPO_TOKEN']))
+    print("printing: sha",os.environ['BASE_COMMIT_SHA'])
     print("Success!!")
 
 if __name__ == "__main__":
