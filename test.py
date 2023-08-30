@@ -56,7 +56,7 @@ def get_addmodified_files(repo_token):
     return list_files
 
 def main():
-    print(get_full_schema_dev("tableau-workbook-action\\tests\\tableau_reports"))
+    print(get_full_schema_dev("tests/tableau_reports"))
     g = Github(os.environ['repo_token'])
     repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
     print(repo)
