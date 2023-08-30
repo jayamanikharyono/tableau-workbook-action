@@ -31,8 +31,8 @@ def get_full_schema_original(project_dir):
 def get_full_schema_dev(project_dir):
     from mergedeep import merge, Strategy
     schema = dict()
+    print(project_dir)
     for currentpath, folders, files in os.walk(project_dir):
-        print(files)
         for file in files:
             if file.endswith(('.twb', '.twbx')):
                 name = re.findall(r'^(.+?)(?:\.twb|\.twbx)', file)[0]
@@ -55,6 +55,9 @@ def get_addmodified_files(repo_token):
     list_files = [file.filename for file in pr.get_files() if os.path.exists(file.filename)]
     return list_files
 
-print(get_full_schema_dev(os.environ['workbook_dir']))
-print("Success!!")
+def main():
+    print(get_full_schema_dev(os.environ['workbook_dir']))
+    print("Success!!")
 
+if __name__ == "__main__":
+    main()
