@@ -7,6 +7,7 @@ import argparse
 from pathlib import Path
 from github import Github
 from tableau_api import TableauApi
+import git
 
 # new library
 import re
@@ -19,8 +20,6 @@ def get_full_schema_dev(project_dir):
     print(project_dir)
     for currentpath, folders, files in os.walk(project_dir):
         for file in files:
-            print(currentpath)
-            print(file)
             if file.endswith(('.twb', '.twbx')):
                 name = re.findall(r'^(.+?)(?:\.twb|\.twbx)', file)[0]
                 project_path = re.findall(fr"{re.escape(project_dir)}/(.+)", currentpath)[0]
@@ -46,7 +45,8 @@ def get_addmodified_files_dev(repo_token):
 
 def main():
     #print(get_full_schema_dev(os.environ['workbook_dir']))
-    print(get_addmodified_files_dev(os.environ['repo_token']))
+    #print(get_addmodified_files_dev(os.environ['repo_token']))
+    print(Github.event.pull_request.base.sha)
     print("Success!!")
 
 if __name__ == "__main__":
