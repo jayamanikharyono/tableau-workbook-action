@@ -5,7 +5,7 @@ import json
 import logging
 import argparse
 from pathlib import Path
-#from github import Github
+from github import Github
 from tableau_api import TableauApi
 
 # new library
