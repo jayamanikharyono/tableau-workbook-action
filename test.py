@@ -32,6 +32,7 @@ def get_full_schema_dev(project_dir):
     from mergedeep import merge, Strategy
     schema = dict()
     for currentpath, folders, files in os.walk(project_dir):
+        print(files)
         for file in files:
             if file.endswith(('.twb', '.twbx')):
                 name = re.findall(r'^(.+?)(?:\.twb|\.twbx)', file)[0]
