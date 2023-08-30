@@ -13,21 +13,6 @@ import re
 
 
 
-
-def get_full_schema_original(project_dir):
-    print(project_dir)
-    from mergedeep import merge, Strategy
-    full_schema = None
-    for schema_file in Path(project_dir).glob("**/*.yml"):
-        schema = yaml.full_load(schema_file.open())
-        full_schema = merge(full_schema, schema, strategy=Strategy.ADDITIVE) if full_schema is not None else schema
-
-    new_schema = dict({'workbooks':dict()})
-    for value in full_schema['workbooks']:
-        new_schema['workbooks'][value['file_path']] = value
-
-    return new_schema
-
 def get_full_schema_dev(project_dir):
     from mergedeep import merge, Strategy
     schema = dict()
@@ -48,20 +33,20 @@ def get_full_schema_dev(project_dir):
                                           })
     return schema
 
-def get_addmodified_files(repo_token):
+def get_addmodified_files_dev(repo_token):
     g = Github(repo_token)
     repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
     event_payload = open(os.environ['GITHUB_EVENT_PATH']).read()
     json_payload =  json.loads(event_payload)
+    print(json_payload)
     pr = repo.get_pull(json_payload['number'])
+    print(pr)
     list_files = [file.filename for file in pr.get_files() if os.path.exists(file.filename)]
     return list_files
 
 def main():
-    print(get_full_schema_dev(os.environ['workbook_dir']))
-    g = Github(os.environ['repo_token'])
-    repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
-    print(repo)
+    #print(get_full_schema_dev(os.environ['workbook_dir']))
+    print(get_addmodified_files_dev(os.environ['repo_token']))
     print("Success!!")
 
 if __name__ == "__main__":
