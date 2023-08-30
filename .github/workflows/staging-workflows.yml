@@ -34,7 +34,7 @@ jobs:
           TABLEAU_URL: ${{ secrets.TABLEAU_URL }}
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WORKBOOK_DIR: "tests/tableau_reports"
-          #BASE_COMMIT_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_COMMIT_SHA: ${{ github.event.pull_request.base.sha }}
         # with:
         #   workbook_dir: tests/workbooks
         #   env: staging
