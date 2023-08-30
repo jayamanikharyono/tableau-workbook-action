@@ -34,18 +34,31 @@ def get_full_schema_dev(project_dir):
 def get_addmodified_files_dev(repo_token):
     g = Github(repo_token)
     repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
-    event_payload = open(os.environ['GITHUB_EVENT_PATH']).read()
-    json_payload =  json.loads(event_payload)
-    print(json_payload)
-    pr = repo.get_pull(json_payload['number'])
-    print(pr)
-    list_files = [file.filename for file in pr.get_files() if os.path.exists(file.filename)]
-    return list_files
+    pr_number = os.environ["GITHUB_REF"].split("/")[-1]
+    pull_request = repo.get_pull(pr_number)
+    base_commit = pull_request.base.sha
+    head_commit = pull_request.head.sha
+
+    diff = repo.compare(base_commit, head_commit)
+    added_files = [file.filename for file in diff.files if file.status == "added"]
+    modified_files = [file.filename for file in diff.files if file.status == "modified"]
+    deleted_files = [file.filename for file in diff.files if file.status == "removed"]
+
+    print("Added files:")
+    for filename in added_files:
+        print(f"A {filename}")
+
+    print("Modified files:")
+    for filename in modified_files:
+        print(f"M {filename}")
+
+    print("Deleted files:")
+    for filename in deleted_files:
+        print(f"D {filename}")
 
 def main():
     #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
-    #print(get_addmodified_files_dev(os.environ['REPO_TOKEN']))
-    print("printing: sha",os.environ['BASE_COMMIT_SHA'])
+    print(get_addmodified_files_dev(os.environ['REPO_TOKEN']))
     print("Success!!")
 
 if __name__ == "__main__":
