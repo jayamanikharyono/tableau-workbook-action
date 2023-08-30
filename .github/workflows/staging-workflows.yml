@@ -25,7 +25,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
+      - name: Print Current Path
+        run: |
+          echo "Current working directory:"
+          cd  
       - name: 'Tableau Workbook Action'
         run: python test.py
         env:
