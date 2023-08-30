@@ -6,11 +6,15 @@ import logging
 import argparse
 from pathlib import Path
 from github import Github
-
 from tableau_api import TableauApi
 
+# new library
+import re
 
-def get_full_schema(project_dir):
+
+
+
+def get_full_schema_original(project_dir):
     print(project_dir)
     from mergedeep import merge, Strategy
     full_schema = None
@@ -24,6 +28,31 @@ def get_full_schema(project_dir):
 
     return new_schema
 
-full_schema_config = get_full_schema("tests/workbooks")
-for i in full_schema_config['workbooks'].keys():
-    print(i)
+def get_full_schema_dev(project_dir):
+    from mergedeep import merge, Strategy
+    schema = dict()
+    for currentpath, folders, files in os.walk(project_dir):
+        for file in files:
+            if file.endswith(('.twb', '.twbx')):
+                name = re.findall(r'^(.+?)(?:\.twb|\.twbx)', file)[0]
+                project_path = re.findall(fr"{re.escape(project_dir)}\\(.+)", currentpath)[0]
+                file_path = file
+                full_path = os.path.join(project_path, file_path)
+                schema[full_path] = dict({'name': name,
+                                          'project_path': project_path,
+                                          'file_path': file_path
+                                          })
+    return schema
+
+def get_addmodified_files(repo_token):
+    g = Github(repo_token)
+    repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
+    event_payload = open(os.environ['GITHUB_EVENT_PATH']).read()
+    json_payload =  json.loads(event_payload)
+    pr = repo.get_pull(json_payload['number'])
+    list_files = [file.filename for file in pr.get_files() if os.path.exists(file.filename)]
+    return list_files
+
+print("Success!!")
+#print(get_full_schema_original("tests/workbooks"))
+
