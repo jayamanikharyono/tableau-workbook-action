@@ -35,8 +35,7 @@ def get_full_schema_dev(project_dir):
 def get_addmodified_files_dev():
     g = Github(os.environ['REPO_TOKEN'])
     repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
-    pr_number = os.environ['PR_NUMBER']
-    print(pr_number)
+    pr_number = int(os.environ['PR_NUMBER'])
     pull_request = repo.get_pull(pr_number)
     base_commit = pull_request.base.sha
     head_commit = pull_request.head.sha
