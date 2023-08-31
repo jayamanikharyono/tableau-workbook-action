@@ -48,29 +48,34 @@ def get_addmodified_files_dev():
     copied_files = []
 
     for file in diff.files:
-        match file.status:
-            case "added":
-                added_files.append(file)
-            case  "renamed":
-                renamed_files.append(file)
-
-    
-    modified_files = [file.filename for file in diff.files if file.status == "modified"]
-    deleted_files = [file.filename for file in diff.files if file.status == "removed"]
+        if file.status == "added":
+            added_files.append(file)
+        elif file.status == "renamed":
+            renamed_files.append(file)
+        elif file.status == "modified":
+            modified_files.append(file)
+        elif file.status == "deleted":
+            deleted_files.append(file)
+        elif file.status == "copied":
+            copied_files.append(file)
+        else:
+            print(f"WARNING: {file.filename} does not have the relevant status. Checking the file is suggested.")
 
     print("Added files:")
     for filename in added_files:
         print(f"A {filename}")
     print("Renamed files:")
     for filename in renamed_files:
-        print(f"D {filename}")
+        print(f"R {filename}")
     print("Modified files:")
     for filename in modified_files:
         print(f"M {filename}")
-
     print("Deleted files:")
     for filename in deleted_files:
         print(f"D {filename}")
+    print("Copied files:")
+    for filename in copied_files:
+        print(f"C {filename}")
 
 def main():
     #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
