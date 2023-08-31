@@ -14,23 +14,6 @@ import re
 
 
 
-def get_full_schema_dev(project_dir):
-    from mergedeep import merge, Strategy
-    schema = dict()
-    print(project_dir)
-    for currentpath, folders, files in os.walk(project_dir):
-        for file in files:
-            if file.endswith(('.twb', '.twbx')):
-                name = re.findall(r'^(.+?)(?:\.twb|\.twbx)', file)[0]
-                project_path = re.findall(fr"{re.escape(project_dir)}/(.+)", currentpath)[0]
-                file_path = file
-                full_path = os.path.join(project_path, file_path)
-                schema[full_path] = dict({'name': name,
-                                          'project_path': project_path,
-                                          'file_path': file_path,
-                                          'full_path': full_path
-                                          })
-    return schema
 
 def get_changed_files_dev():
     g = Github(os.environ['REPO_TOKEN'])
@@ -65,11 +48,37 @@ def get_changed_files_dev():
     #         print(f"{status[0].capitalize()} {file}")
     return status_files
 
+
+def submit_workbook_dev(file_name, file_path, env):
+    if env != 'production':
+        project_path = 'fugo_test/' + os.environ['WORKBOOK_DIR']
+
+    tableau_api = TableauApi(os.environ['USERNAME'],
+                            os.environ['PASSWORD'],
+                            os.environ['TABLEAU_URL'] + '/api/',
+                            os.environ['TABLEAU_URL'],
+                            os.environ['SITE_ID'])
+    # project_id = tableau_api.get_project_id_by_path_with_tree(project_path)
+
+    # if project_id is None:
+    #     logging.info("Existing project on a given path doesn't exist, creating new project")
+    #     project_id = tableau_api.create_project_by_path(project_path)
+
+
+
+    # new_workbook = tableau_api.publish_workbook(name =  file_name,
+    #                                             project_id = project_id,
+    #                                             file_path = file_path)
+
+    # return project_path, new_workbook
+
 def main():
-    print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
+    
     filepath = "tests/tableau_reports/folder2/folder3/added_file.twbx"
-    filename = "added_file.twbx"
+    filename = "added_file"
+    env = 'test'
     #print(get_changed_files_dev())
+    submit_workbook_dev(filename, filepath, env)
     print("Success!!")
 
 if __name__ == "__main__":
