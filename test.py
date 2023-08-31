@@ -35,9 +35,11 @@ def get_full_schema_dev(project_dir):
 def get_addmodified_files_dev():
 
     repo = git.Repo(".")
+    print(repo)
     commits = repo.head.commit.parents
+    print(commits)
     previous_commit = commits[0] if commits else None
-
+    print(previous_commit)
     if previous_commit:
         diff = previous_commit.diff(repo.head.commit)
         added_files = [file.a_path for file in diff.iter_change_type('A')]
