@@ -32,14 +32,13 @@ def get_full_schema_dev(project_dir):
                                           })
     return schema
 
-def get_addmodified_files_dev():
+def get_changed_files_dev():
     g = Github(os.environ['REPO_TOKEN'])
     repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
     pr_number = int(os.environ['PR_NUMBER'])
     pull_request = repo.get_pull(pr_number)
     base_commit = pull_request.base.sha
     head_commit = pull_request.head.sha
-
     diff = repo.compare(base_commit, head_commit)
     status_files = {
         "added": [],
@@ -47,7 +46,6 @@ def get_addmodified_files_dev():
         "modified": [],
         "removed": []
     }
-
     for file in diff.files:
         if file.status == "added":
             status_files["added"].append(file)
@@ -58,17 +56,20 @@ def get_addmodified_files_dev():
         elif file.status == "removed":
             status_files["removed"].append(file)
         else:
-            print(f"WARNING: {file.filename} does not have the relevant status. Checking the file is suggested.")
-    
-    print("Files by Status:")
-    for status, files in status_files.items():
-        print(f"{status.capitalize()} files:")
-        for file in files:
-            print(f"{status[0].capitalize()} {file}")
+            print(f"WARNING: {file.filename} does not have a relevant status. Checking the file is suggested.")
+    # debug
+    # print("Files by Status:")
+    # for status, files in status_files.items():
+    #     print(f"{status.capitalize()} files:")
+    #     for file in files:
+    #         print(f"{status[0].capitalize()} {file}")
+    return status_files
 
 def main():
-    #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
-    print(get_addmodified_files_dev())
+    print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
+    filepath = "tests/tableau_reports/folder2/folder3/added_file.twbx"
+    filename = "added_file.twbx"
+    #print(get_changed_files_dev())
     print("Success!!")
 
 if __name__ == "__main__":
