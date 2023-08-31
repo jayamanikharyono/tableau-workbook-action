@@ -41,41 +41,30 @@ def get_addmodified_files_dev():
     head_commit = pull_request.head.sha
 
     diff = repo.compare(base_commit, head_commit)
-    added_files = []
-    renamed_files = []
-    modified_files = []
-    deleted_files = []
-    copied_files = []
+    status_files = {
+        "added": [],
+        "renamed": [],
+        "modified": [],
+        "removed": []
+    }
 
     for file in diff.files:
         if file.status == "added":
-            added_files.append(file)
+            status_files["added"].append(file)
         elif file.status == "renamed":
-            renamed_files.append(file)
+            status_files["renamed"].append(file)
         elif file.status == "modified":
-            modified_files.append(file)
-        elif file.status == "deleted":
-            deleted_files.append(file)
-        elif file.status == "copied":
-            copied_files.append(file)
+            status_files["modified"].append(file)
+        elif file.status == "removed":
+            status_files["removed"].append(file)
         else:
             print(f"WARNING: {file.filename} does not have the relevant status. Checking the file is suggested.")
-
-    print("Added files:")
-    for filename in added_files:
-        print(f"A {filename}")
-    print("Renamed files:")
-    for filename in renamed_files:
-        print(f"R {filename}")
-    print("Modified files:")
-    for filename in modified_files:
-        print(f"M {filename}")
-    print("Deleted files:")
-    for filename in deleted_files:
-        print(f"D {filename}")
-    print("Copied files:")
-    for filename in copied_files:
-        print(f"C {filename}")
+    
+    print("Files by Status:")
+    for status, files in status_files.items():
+        print(f"{status.capitalize()} files:")
+        for file in files:
+            print(f"{status[0].capitalize()} {file}")
 
 def main():
     #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
