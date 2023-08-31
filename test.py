@@ -41,6 +41,7 @@ def get_addmodified_files_dev():
     head_commit = pull_request.head.sha
 
     diff = repo.compare(base_commit, head_commit)
+    print(diff.files)
     added_files = [file.filename for file in diff.files if file.status == "added"]
     modified_files = [file.filename for file in diff.files if file.status == "modified"]
     deleted_files = [file.filename for file in diff.files if file.status == "removed"]
