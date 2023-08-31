@@ -1,22 +1,43 @@
-name: Tableau Workbook Workflows Staging
+name: Tableau Workbook Auto Deployment
 on:
   pull_request:
-      branches:
-        - master
+    types:
+      - closed
+    branches:
+      - master
 jobs:
-  tableau-validation-action:
-    name: Tableau Workbook Staging Publisher
+  tableau-deployment-action:
+    name: Tableau Workbook Publisher
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: 'Tableau Workbook Action' #This workflows expected to be error since no secrets vars provided
-        uses: ./
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Create and activate virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+
+      - name: 'Tableau Workbook Action'
+        run: python test.py
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
           SITE_ID: ${{ secrets.SITE_ID }}
           TABLEAU_URL: ${{ secrets.TABLEAU_URL }}
-        with:
-          workbook_dir: tests/workbooks
-          env: staging
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKBOOK_DIR: "tests/tableau_reports"
+          PR_NUMBER: ${{ github.event.number }}
+        # with:
+        #   workbook_dir: tests/workbooks
+        #   env: staging
+        #   repo_token: ${{ secrets.GITHUB_TOKEN }}
