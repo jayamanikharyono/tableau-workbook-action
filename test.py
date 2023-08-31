@@ -33,25 +33,30 @@ def get_full_schema_dev(project_dir):
     return schema
 
 def get_addmodified_files_dev():
+    g = Github(os.environ['REPO_TOKEN'])
+    repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
+    pr_number = os.environ['PR_NUMBER']
+    print(pr_number)
+    pull_request = repo.get_pull(pr_number)
+    base_commit = pull_request.base.sha
+    head_commit = pull_request.head.sha
 
-    repo = git.Repo(".")
-    print(repo)
-    commits = repo.head.commit.parents
-    print(commits)
-    previous_commit = commits[0] if commits else None
-    print(previous_commit)
-    if previous_commit:
-        diff = previous_commit.diff(repo.head.commit)
-        added_files = [file.a_path for file in diff.iter_change_type('A')]
-        modified_files = [file.a_path for file in diff.iter_change_type('M')]
-        deleted_files = [file.a_path for file in diff.iter_change_type('D')]
+    diff = repo.compare(base_commit, head_commit)
+    added_files = [file.filename for file in diff.files if file.status == "added"]
+    modified_files = [file.filename for file in diff.files if file.status == "modified"]
+    deleted_files = [file.filename for file in diff.files if file.status == "removed"]
 
-        print("Added files:", added_files)
-        print("Modified files:", modified_files)
-        print("Deleted files:", deleted_files)
-    else:
-        print("No previous commit available.")
+    print("Added files:")
+    for filename in added_files:
+        print(f"A {filename}")
 
+    print("Modified files:")
+    for filename in modified_files:
+        print(f"M {filename}")
+
+    print("Deleted files:")
+    for filename in deleted_files:
+        print(f"D {filename}")
 
 def main():
     #print(get_full_schema_dev(os.environ['WORKBOOK_DIR']))
