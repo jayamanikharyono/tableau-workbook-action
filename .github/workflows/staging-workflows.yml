@@ -1,4 +1,4 @@
-name: Tableau Workbook Workflows Staging
+name: Tableau Workbook Auto Deployment
 on:
   pull_request:
     types:
@@ -6,8 +6,8 @@ on:
     branches:
       - master
 jobs:
-  tableau-validation-action:
-    name: Tableau Workbook Staging Publisher
+  tableau-deployment-action:
+    name: Tableau Workbook Publisher
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
